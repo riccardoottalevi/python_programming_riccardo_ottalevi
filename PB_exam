@@ -1,0 +1,51 @@
+#define sequences, col and row
+seq1 = 'ACTAAG'
+seq2 = 'ACCAGGT'
+col = len(seq1) +1
+row = len(seq2) +1
+#pretty matrix
+def Prettymatrix(M):
+    for row in M:
+        print(row)
+        
+def N_W(seq1,seq2):
+#initialize scoring matrix
+    S = []
+    for i in range(0, row):
+        S.append([])
+        for k in range(0, col):
+            S[i].append((0, '0'))
+            
+#define scores            
+    match = 2
+    mism = 1
+    gap = -2
+
+#fill first col and first row of scoring matrix    
+    for i in range(1, row):
+        S[i][0] = (i*gap, 'U')
+    for k in range(1, col):
+        S[0][k] = (k*gap, 'L')
+        
+#fill the scoring matrix    
+    for i in range(1, row):
+        for k in range(1, col):
+            if seq1[k-1] == seq2[i-1]:
+                Diagonal_score = S[i-1][k-1][0] + match
+            else:
+                Diagonal_score = S[i-1][k-1][0] + mism
+        
+            Up_score = S[i-1][k][0] + gap
+            Left_score = S[i][k-1][0] + gap
+        
+            max_score = max(Diagonal_score, Up_score, Left_score)
+        
+            if max_score == Diagonal_score:
+                S[i][k] = (max_score, 'D')
+            elif max_score == Up_score:
+                S[i][k] = (max_score, 'U')
+            else:
+                S[i][k] = (max_score, 'L')
+    
+    return(S)
+Prettymatrix(N_W(seq1,seq2))       
